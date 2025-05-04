@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gráfico Interativo</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    canvas {
+      max-width: 600px;
+      margin: 20px auto;
+      display: block;
+    }
+    form {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">Gráfico Interativo</h1>
+  <canvas id="myChart"></canvas>
+  <form id="dataForm">
+    <input type="text" id="labelInput" placeholder="Rótulo" required>
+    <input type="number" id="valueInput" placeholder="Valor" required>
+    <button type="submit">Adicionar Dados</button>
+  </form>
+
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar', 
+      data: {
+        labels: [], 
+        datasets: [{
+          label: 'Dados Dinâmicos',
+          data: [], 
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    document.getElementById('dataForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const label = document.getElementById('labelInput').value;
+      const value = parseFloat(document.getElementById('valueInput').value);
+
+      if (label && !isNaN(value)) {
+        chart.data.labels.push(label);
+        chart.data.datasets[0].data.push(value);
+        chart.update(); 
+        this.reset(); 
+      }
+    });
+  </script>
+</body>
+</html>
